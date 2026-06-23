@@ -1,0 +1,12 @@
+{
+  "name": "@sina-maoni/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "next lint",
+    "test": "vitest",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  }
+}

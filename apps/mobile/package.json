@@ -1,0 +1,22 @@
+{
+  "name": "@sina-maoni/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "build": "expo export",
+    "lint": "eslint .",
+    "test": "vitest",
+    "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "expo": "~52.0.0",
+    "react": ">=18.0.0",
+    "react-native": "0.7x"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@sina-maoni/config-typescript",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "tsconfig.base.json",
+  "scripts": {},
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
+}

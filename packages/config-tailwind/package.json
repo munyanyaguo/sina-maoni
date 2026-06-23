@@ -1,0 +1,12 @@
+{
+  "name": "@sina-maoni/config-tailwind",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "tailwind.config.mjs",
+  "scripts": {},
+  "dependencies": {
+    "tailwindcss": "^4.0.0"
+  },
+  "devDependencies": {}
+}
