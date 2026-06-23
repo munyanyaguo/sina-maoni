@@ -1,0 +1,53 @@
+name: Deploy Web
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - "packages/**"
+      - "turbo.json"
+      - "pnpm-lock.yaml"
+      - "package.json"
+
+jobs:
+  deploy-web:
+    name: Build and deploy web to Vercel
+    runs-on: ubuntu-latest
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.8.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build web app
+        run: pnpm build:repo
+
+      - name: Install Vercel CLI
+        run: pnpm dlx vercel@latest --version
+
+      - name: Deploy to Vercel
+        run: |
+          cd apps/web
+          pnpm dlx vercel --prod --token "$VERCEL_TOKEN" \
+            --scope "$VERCEL_ORG_ID" \
+            --confirm
