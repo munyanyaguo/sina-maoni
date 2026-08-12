@@ -3,20 +3,25 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
-    "test": "vitest",
-    "type-check": "tsc -p tsconfig.json --noEmit"
+    "test": "vitest run --passWithNoTests",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "browsers:install": "playwright install --with-deps chromium"
   },
   "dependencies": {
-    "axe-core": "^4.9.0",
-    "@playwright/test": "^1.45.0"
+    "@axe-core/playwright": "^4.10.1",
+    "@sina-maoni/core": "workspace:*",
+    "axe-core": "^4.10.2",
+    "playwright": "^1.49.1"
   },
   "devDependencies": {
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "@sina-maoni/config-typescript": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   }
 }

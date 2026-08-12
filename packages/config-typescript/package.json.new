@@ -1,0 +1,12 @@
+{
+  "name": "@sina-maoni/config-typescript",
+  "version": "0.0.0",
+  "private": true,
+  "files": ["tsconfig.base.json", "library.json", "react.json", "nextjs.json"],
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./library.json": "./library.json",
+    "./react.json": "./react.json",
+    "./nextjs.json": "./nextjs.json"
+  }
+}

@@ -4,20 +4,47 @@
   "private": true,
   "description": "Sina Maoni – accessibility scanning platform",
   "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "type-check": "turbo run type-check",
     "dev:repo": "turbo run dev",
     "build:repo": "turbo run build",
     "lint:repo": "turbo run lint",
     "test:repo": "turbo run test",
-    "type-check:repo": "turbo run type-check"
+    "type-check:repo": "turbo run type-check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:generate": "pnpm --filter @sina-maoni/db db:generate",
+    "db:migrate": "pnpm --filter @sina-maoni/db db:migrate",
+    "db:studio": "pnpm --filter @sina-maoni/db db:studio",
+    "db:seed": "pnpm --filter @sina-maoni/db db:seed",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "turbo": "^2.9.18",
-    "typescript": "^5.9.3",
+    "@sina-maoni/config-eslint": "workspace:*",
     "eslint": "^9.39.4",
-    "prettier": "^3.8.4",
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.2"
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.8.4",
+    "turbo": "^2.9.18",
+    "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,mjs,cjs,js,jsx}": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.{json,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
   },
   "packageManager": "pnpm@11.8.0",
   "devEngines": {

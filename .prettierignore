@@ -1,0 +1,11 @@
+node_modules
+dist
+build
+coverage
+.turbo
+.next
+.expo
+.output
+.wxt
+pnpm-lock.yaml
+src-tauri/target

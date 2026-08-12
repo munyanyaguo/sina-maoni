@@ -1,0 +1,12 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tooling/*"
+
+# pnpm >=10 blocks lifecycle scripts unless explicitly allowed.
+onlyBuiltDependencies:
+  - "@swc/core"
+  - "@tailwindcss/oxide"
+  - "esbuild"
+  - "sharp"
+  - "unrs-resolver"

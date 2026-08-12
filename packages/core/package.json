@@ -3,19 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
-    "test": "vitest",
+    "test": "vitest run --passWithNoTests",
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "zod": "^3.23.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "@sina-maoni/config-typescript": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   }
 }

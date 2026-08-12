@@ -1,0 +1,17 @@
+@import "@sina-maoni/config-tailwind/theme.css";
+
+@source "../../../packages/ui/src";
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+/* Never remove focus indicators on an accessibility product. */
+:focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+}

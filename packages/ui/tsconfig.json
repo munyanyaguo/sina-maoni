@@ -1,0 +1,5 @@
+{
+  "extends": "@sina-maoni/config-typescript/react.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}

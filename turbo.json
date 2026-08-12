@@ -1,13 +1,16 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".env.example"],
   "globalEnv": ["NODE_ENV"],
   "tasks": {
     "dev": {
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "env": ["DATABASE_URL", "NEXT_PUBLIC_API_URL", "EXPO_PUBLIC_API_URL", "VITE_API_URL"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".output/**"]
     },
     "lint": {
       "outputs": []
@@ -17,6 +20,7 @@
       "outputs": ["coverage/**"]
     },
     "type-check": {
+      "dependsOn": ["^build"],
       "outputs": []
     }
   }

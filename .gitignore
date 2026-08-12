@@ -1,1 +1,33 @@
 node_modules
+dist
+build
+coverage
+.turbo
+
+# next
+.next
+out
+next-env.d.ts
+
+# expo
+.expo
+android
+ios
+
+# tauri
+target
+src-tauri/gen
+
+# wxt
+.wxt
+.output
+
+# env
+.env
+.env.*
+!.env.example
+
+# misc
+*.tsbuildinfo
+.DS_Store
+*.log

@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
-    "test": "vitest",
+    "test": "vitest run --passWithNoTests",
     "type-check": "tsc -p tsconfig.json --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
@@ -22,8 +22,11 @@
     "postgres": "^3.4.4"
   },
   "devDependencies": {
+    "@sina-maoni/config-typescript": "workspace:*",
+    "@types/node": "^22.10.0",
     "drizzle-kit": "^0.30.0",
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   }
 }

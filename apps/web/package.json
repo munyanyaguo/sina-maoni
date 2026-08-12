@@ -2,11 +2,31 @@
   "name": "@sina-maoni/web",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3000",
     "build": "next build",
-    "lint": "next lint",
-    "test": "vitest",
+    "start": "next start",
+    "lint": "eslint .",
+    "test": "vitest run --passWithNoTests",
     "type-check": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@sina-maoni/core": "workspace:*",
+    "@sina-maoni/ui": "workspace:*",
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@sina-maoni/config-tailwind": "workspace:*",
+    "@sina-maoni/config-typescript": "workspace:*",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   }
 }
