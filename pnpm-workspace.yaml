@@ -3,6 +3,11 @@ packages:
   - "packages/*"
   - "tooling/*"
 
+allowBuilds:
+  esbuild: true
+  sharp: true
+  spawn-sync: true
+
 # pnpm >=10 blocks lifecycle scripts unless explicitly allowed.
 onlyBuiltDependencies:
   - "@swc/core"

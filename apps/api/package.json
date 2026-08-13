@@ -4,30 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsup",
-    "start": "node dist/server.js",
+    "dev": "echo 'Fastify server lands in Phase 1 (Days 21-25)'",
     "lint": "eslint .",
     "test": "vitest run --passWithNoTests",
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": {
-    "@fastify/cors": "^10.0.2",
-    "@fastify/helmet": "^12.0.1",
-    "@fastify/rate-limit": "^10.2.2",
-    "@fastify/swagger": "^9.4.0",
-    "@fastify/swagger-ui": "^5.2.0",
-    "@sina-maoni/core": "workspace:*",
-    "@sina-maoni/db": "workspace:*",
-    "fastify": "^5.2.1",
-    "pino": "^9.6.0",
-    "zod": "^3.24.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@sina-maoni/config-typescript": "workspace:*",
     "@types/node": "^22.10.0",
-    "tsup": "^8.3.5",
-    "tsx": "^4.19.0",
     "typescript": "^5.9.3",
     "vitest": "^2.1.9"
   }

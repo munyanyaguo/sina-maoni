@@ -1,46 +1,41 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
 echo "=== Sina Maoni · Phase 0 Check ==="
 
 if ! command -v pnpm >/dev/null 2>&1; then
-  echo "pnpm not found on PATH. Install pnpm first."
+  echo "pnpm not found on PATH. Install Node 22 and run 'corepack enable'."
   exit 1
 fi
 
-echo ""
-echo "1) Installing dependencies with pnpm..."
-pnpm install --no-frozen-lockfile
+FAILED=()
 
-echo ""
-echo "2) Running lint (turbo via npm script)..."
-pnpm lint:repo
-
-echo ""
-echo "3) Running type-check..."
-pnpm type-check:repo
-
-echo ""
-echo "4) Running tests..."
-pnpm test:repo
-
-echo ""
-echo "5) Running build..."
-pnpm build:repo
-
-# Optional DB checks (Phase 0: schema + migrations working)
-if [ -d "packages/db" ]; then
+step() {
+  local label="$1"
+  shift
   echo ""
-  echo "6) Running Drizzle migrations (packages/db)..."
-  cd packages/db
-  if [ -f "drizzle.config.ts" ] || [ -f "drizzle.config.mts" ] || [ -f "drizzle.config.mjs" ]; then
-    pnpm db:migrate
+  echo "----- $label -----"
+  if "$@"; then
+    echo "PASS: $label"
   else
-    echo "Skipping db:migrate (no drizzle.config.* found)."
+    echo "FAIL: $label"
+    FAILED+=("$label")
   fi
-  cd - >/dev/null
+}
+
+step "install" pnpm install --no-frozen-lockfile
+step "format" pnpm format:check
+step "lint" pnpm lint:repo
+step "type-check" pnpm type-check:repo
+step "test" pnpm test:repo
+step "build" pnpm build:repo
+
+echo ""
+if [ ${#FAILED[@]} -eq 0 ]; then
+  echo "=== Phase 0 checks PASSED ==="
+  echo "Next: bring up Postgres ('pnpm db:up') and run migrations."
+  exit 0
 fi
 
-echo ""
-echo "=== Phase 0 checks completed successfully ==="
-echo "Next manual step: run 'pnpm dev' in another terminal and confirm all apps start."
+echo "=== Phase 0 checks FAILED: ${FAILED[*]} ==="
+exit 1

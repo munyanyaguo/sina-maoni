@@ -12,8 +12,6 @@
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@sina-maoni/core": "workspace:*",
-    "@sina-maoni/ui": "workspace:*",
     "next": "^15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

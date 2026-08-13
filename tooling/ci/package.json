@@ -1,26 +1,19 @@
 {
   "name": "@sina-maoni/ci",
   "version": "0.0.0",
-  "private": false,
+  "private": true,
   "type": "module",
-  "bin": {
-    "sina-maoni": "dist/cli.mjs"
+  "exports": {
+    ".": "./src/index.ts"
   },
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
-    "test": "vitest",
-    "type-check": "tsc -p tsconfig.json --noEmit",
-    "publish:dry": "npm publish --dry-run"
-  },
-  "dependencies": {
-    "commander": "^12.0.0",
-    "node-fetch": "^3.3.0"
+    "test": "vitest run --passWithNoTests",
+    "type-check": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
-    "typescript": "^5.5.0",
-    "vitest": "^2.0.0"
+    "@sina-maoni/config-typescript": "workspace:*",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
   }
 }

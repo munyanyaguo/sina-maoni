@@ -8,13 +8,33 @@ on:
     branches:
       - "**"
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     name: Lint, type-check, test, build
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: sina
+          POSTGRES_PASSWORD: sina
+          POSTGRES_DB: sina_maoni
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sina -d sina_maoni"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
     env:
       NODE_ENV: test
+      DATABASE_URL: postgresql://sina:sina@localhost:5432/sina_maoni
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
@@ -22,19 +42,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # Version comes from the "packageManager" field; setting it here too is an error.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11.8.0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm format:check
 
       - name: Lint (turbo lint)
         run: pnpm lint:repo
@@ -47,3 +69,23 @@ jobs:
 
       - name: Build (turbo build)
         run: pnpm build:repo
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level high

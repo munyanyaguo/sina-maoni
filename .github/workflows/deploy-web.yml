@@ -1,15 +1,8 @@
 name: Deploy Web
 
+# Manual until Phase 3 (Day 185) ships the dashboard and the Vercel project exists.
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "apps/web/**"
-      - "packages/**"
-      - "turbo.json"
-      - "pnpm-lock.yaml"
-      - "package.json"
+  workflow_dispatch:
 
 jobs:
   deploy-web:
@@ -27,13 +20,11 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11.8.0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "pnpm"
 
       - name: Install dependencies

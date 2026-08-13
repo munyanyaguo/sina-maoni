@@ -5,13 +5,7 @@ export const impactSchema = z.enum(["critical", "serious", "moderate", "minor"])
 export const scanSourceSchema = z.enum(["manual", "ci", "extension", "scheduled", "mobile_app"]);
 export const scanStatusSchema = z.enum(["queued", "running", "completed", "failed"]);
 export const findingStatusSchema = z.enum(["open", "ignored", "waived"]);
-export const issueStatusSchema = z.enum([
-  "open",
-  "in_progress",
-  "fixed",
-  "verified",
-  "wont_fix",
-]);
+export const issueStatusSchema = z.enum(["open", "in_progress", "fixed", "verified", "wont_fix"]);
 
 export type WcagLevel = z.infer<typeof wcagLevelSchema>;
 export type Impact = z.infer<typeof impactSchema>;

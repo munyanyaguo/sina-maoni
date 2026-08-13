@@ -21,9 +21,9 @@ describe("calculateScore", () => {
 
 describe("countByImpact", () => {
   it("tallies each impact level", () => {
-    expect(countByImpact([{ impact: "critical" }, { impact: "critical" }, { impact: "minor" }])).toEqual(
-      { critical: 2, serious: 0, moderate: 0, minor: 1 },
-    );
+    expect(
+      countByImpact([{ impact: "critical" }, { impact: "critical" }, { impact: "minor" }]),
+    ).toEqual({ critical: 2, serious: 0, moderate: 0, minor: 1 });
   });
 });
 

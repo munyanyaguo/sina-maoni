@@ -74,7 +74,10 @@ async function main(): Promise<void> {
 
     const [user] = await db
       .insert(users)
-      .values({ email: `founder+${randomUUID().slice(0, 8)}@sina-maoni.test`, name: "Demo Founder" })
+      .values({
+        email: `founder+${randomUUID().slice(0, 8)}@sina-maoni.test`,
+        name: "Demo Founder",
+      })
       .returning();
     if (!user) throw new Error("Failed to insert user");
 
