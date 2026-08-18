@@ -9,11 +9,10 @@
     "test": "vitest run --passWithNoTests",
     "type-check": "tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": {},
   "devDependencies": {
     "@sina-maoni/config-typescript": "workspace:*",
     "@types/node": "^22.10.0",
     "typescript": "^5.9.3",
-    "vitest": "^2.1.9"
+    "vitest": "^4.1.10"
   }
 }

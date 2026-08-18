@@ -1,10 +1,5 @@
 {
-  "extends": "@sina-maoni/config-typescript/react.json",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "moduleResolution": "Bundler",
-    "types": ["react", "node"]
-  },
-  "include": ["*.ts", "*.tsx", "src/**/*.ts", "src/**/*.tsx"],
+  "extends": "@sina-maoni/config-typescript/library.json",
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", ".expo"]
 }
