@@ -40,14 +40,14 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Version comes from the "packageManager" field; setting it here too is an error.
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
           cache: "pnpm"
@@ -58,16 +58,16 @@ jobs:
       - name: Format check
         run: pnpm format:check
 
-      - name: Lint (turbo lint)
+      - name: Lint
         run: pnpm lint:repo
 
-      - name: Type-check (turbo type-check)
+      - name: Type-check
         run: pnpm type-check:repo
 
-      - name: Test (turbo test)
+      - name: Test
         run: pnpm test:repo
 
-      - name: Build (turbo build)
+      - name: Build
         run: pnpm build:repo
 
   audit:
@@ -76,16 +76,16 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
 
+      # No dependency cache here: this job never installs, it only reads the lockfile.
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: "22"
-          cache: "pnpm"
 
       - name: Audit dependencies
         run: pnpm audit --audit-level high
