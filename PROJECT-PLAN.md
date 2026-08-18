@@ -161,10 +161,10 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 - [x] Concurrency group cancels superseded runs
 - [x] `deploy-api.yml` gated to manual dispatch until Phase 1
 - [x] `deploy-web.yml` gated to manual dispatch until Phase 3
-- [ ] First CI run is green on GitHub
+- [x] First CI run is green on GitHub
 - [ ] Branch protection on `main`: CI required before merge
 - [ ] Turborepo remote cache enabled (`TURBO_TOKEN`, `TURBO_TEAM`)
-- [ ] Repository secrets created
+- [x] Repository secrets created
 
 ### Days 7–10: Database + Drizzle setup
 
