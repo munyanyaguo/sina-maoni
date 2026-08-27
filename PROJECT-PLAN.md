@@ -169,17 +169,17 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 ### Days 7–10: Database + Drizzle setup
 
 - [x] `packages/db` with Drizzle ORM + `postgres` driver + `drizzle-kit` + `tsx`
-- [x] Full schema in `schema.ts`: 13 tables, enums, FKs, indexes, relations
+- [x] Full schema in `schema.ts`: 14 tables, enums, FKs, indexes, relations
 - [x] Inferred `$inferSelect` / `$inferInsert` types exported
 - [x] `drizzle.config.ts` reading `DATABASE_URL`
 - [x] `client.ts` with pooled and single-connection factories
 - [x] Seed script with demo org, user, project, scan, findings
-- [ ] `pnpm db:up` starts Postgres
-- [ ] `pnpm db:generate` produces a migration
-- [ ] `pnpm db:migrate` applies cleanly to an empty database
-- [ ] `pnpm db:seed` runs successfully
-- [ ] `pnpm db:studio` opens
-- [ ] Migration files committed
+- [x] `pnpm db:up` starts Postgres
+- [x] `pnpm db:generate` produces a migration
+- [x] `pnpm db:migrate` applies cleanly to an empty database
+- [x] `pnpm db:seed` runs successfully
+- [x] `pnpm db:studio` opens
+- [x] Migration files committed
 
 ### Days 11–13: Shared core package
 
