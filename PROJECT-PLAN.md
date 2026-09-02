@@ -163,7 +163,7 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 - [x] `deploy-web.yml` gated to manual dispatch until Phase 3
 - [x] First CI run is green on GitHub
 - [ ] Branch protection on `main`: CI required before merge
-- [ ] Turborepo remote cache enabled (`TURBO_TOKEN`, `TURBO_TEAM`)
+- [x] Turborepo remote cache enabled (`TURBO_TOKEN`, `TURBO_TEAM`)
 - [x] Repository secrets created
 
 ### Days 7–10: Database + Drizzle setup
