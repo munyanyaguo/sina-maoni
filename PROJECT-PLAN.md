@@ -153,7 +153,7 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 
 ### Days 4–6: GitHub Actions CI pipeline
 
-- [x] `ci.yml` triggers on push to all branches and on PRs
+- [x] `ci.yml` triggers on PRs to all branches and on push to `main`
 - [x] Node 22 + pnpm via `packageManager` field
 - [x] Postgres 16 service container
 - [x] Steps: install → format → lint → type-check → test → build
@@ -185,11 +185,11 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 
 - [x] `packages/core` with Zod
 - [x] Shared enums: `WcagLevel`, `Impact`, `ScanSource`, `ScanStatus`, `FindingStatus`, `IssueStatus`
-- [x] Scan contracts: `createScanRequestSchema`, `scanResultSchema`, `findingSchema`
+- [x] Scan contracts: `createScanRequestSchema`, `scanResultSchema`, `scanFindingSchema`
 - [x] Scoring helpers: `calculateScore`, `countByImpact`, `shouldFailBuild` + unit tests
-- [ ] Zod schemas mirroring every remaining DB table
-- [ ] Shared types: `Organization`, `Project`, `User`, `Scan`, `Finding`, `Issue`, `Audit`
-- [ ] Role and plan enums shared with the API
+- [x] Zod contract schemas for every remaining DB table (API shape, not row mirrors)
+- [x] Shared types: `Organization`, `Project`, `User`, `Scan`, `Finding`, `Issue`, `Audit`
+- [x] Role and plan enums shared with the API
 
 ### Days 14–17: Environment and secrets management
 

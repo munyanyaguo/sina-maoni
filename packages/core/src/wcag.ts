@@ -1,11 +1,20 @@
 import { z } from "zod";
 
-export const wcagLevelSchema = z.enum(["A", "AA", "AAA"]);
-export const impactSchema = z.enum(["critical", "serious", "moderate", "minor"]);
-export const scanSourceSchema = z.enum(["manual", "ci", "extension", "scheduled", "mobile_app"]);
-export const scanStatusSchema = z.enum(["queued", "running", "completed", "failed"]);
-export const findingStatusSchema = z.enum(["open", "ignored", "waived"]);
-export const issueStatusSchema = z.enum(["open", "in_progress", "fixed", "verified", "wont_fix"]);
+// Exported as const tuples so both z.enum and drizzle's pgEnum can consume them.
+// Order is significant: it defines the Postgres enum ordering.
+export const WCAG_LEVELS = ["A", "AA", "AAA"] as const;
+export const IMPACTS = ["critical", "serious", "moderate", "minor"] as const;
+export const SCAN_SOURCES = ["manual", "ci", "extension", "scheduled", "mobile_app"] as const;
+export const SCAN_STATUSES = ["queued", "running", "completed", "failed"] as const;
+export const FINDING_STATUSES = ["open", "ignored", "waived"] as const;
+export const ISSUE_STATUSES = ["open", "in_progress", "fixed", "verified", "wont_fix"] as const;
+
+export const wcagLevelSchema = z.enum(WCAG_LEVELS);
+export const impactSchema = z.enum(IMPACTS);
+export const scanSourceSchema = z.enum(SCAN_SOURCES);
+export const scanStatusSchema = z.enum(SCAN_STATUSES);
+export const findingStatusSchema = z.enum(FINDING_STATUSES);
+export const issueStatusSchema = z.enum(ISSUE_STATUSES);
 
 export type WcagLevel = z.infer<typeof wcagLevelSchema>;
 export type Impact = z.infer<typeof impactSchema>;

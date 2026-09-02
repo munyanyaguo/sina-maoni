@@ -1,9 +1,11 @@
 name: CI
 
+# Feature branches are covered by pull_request. Restricting push to main stops
+# every pull request from running the whole suite twice.
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
       - "**"

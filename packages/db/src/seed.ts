@@ -1,4 +1,6 @@
-import { createHash, randomUUID } from "node:crypto";
+import { createHash } from "node:crypto";
+
+import { eq } from "drizzle-orm";
 
 import { createSingleConnection } from "./client";
 import {
@@ -12,6 +14,14 @@ import {
   users,
   type NewRule,
 } from "./schema";
+
+// Fixed IDs keep the seed idempotent and let tests and docs reference known rows.
+const SEED_ORG_ID = "00000000-0000-4000-8000-00000000a001";
+const SEED_USER_ID = "00000000-0000-4000-8000-00000000b001";
+const SEED_PROJECT_ID = "00000000-0000-4000-8000-00000000c001";
+const SEED_SCAN_ID = "00000000-0000-4000-8000-00000000d001";
+const SEED_PAGE_ID = "00000000-0000-4000-8000-00000000e001";
+const SEED_PAGE_URL = "https://example.com";
 
 const SEED_RULES: NewRule[] = [
   {
@@ -61,93 +71,94 @@ function fingerprint(ruleId: string, selector: string, url: string): string {
 }
 
 async function main(): Promise<void> {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("Refusing to seed: NODE_ENV is production. This script deletes rows.");
+  }
+
   const { client, db } = createSingleConnection();
 
   try {
-    await db.insert(rules).values(SEED_RULES).onConflictDoNothing();
+    await db.transaction(async (tx) => {
+      await tx.insert(rules).values(SEED_RULES).onConflictDoNothing();
 
-    const [org] = await db
-      .insert(organizations)
-      .values({ name: "Sina Maoni Demo", slug: `demo-${randomUUID().slice(0, 8)}`, plan: "pro" })
-      .returning();
-    if (!org) throw new Error("Failed to insert organization");
+      // Deleting the org cascades to its projects, scans, pages and findings.
+      await tx.delete(organizations).where(eq(organizations.id, SEED_ORG_ID));
+      await tx.delete(users).where(eq(users.id, SEED_USER_ID));
 
-    const [user] = await db
-      .insert(users)
-      .values({
-        email: `founder+${randomUUID().slice(0, 8)}@sina-maoni.test`,
+      await tx.insert(organizations).values({
+        id: SEED_ORG_ID,
+        name: "Sina Maoni Demo",
+        slug: "demo",
+        plan: "pro",
+      });
+
+      await tx.insert(users).values({
+        id: SEED_USER_ID,
+        email: "founder@sina-maoni.test",
         name: "Demo Founder",
-      })
-      .returning();
-    if (!user) throw new Error("Failed to insert user");
+      });
 
-    await db
-      .insert(organizationMembers)
-      .values({ organizationId: org.id, userId: user.id, role: "owner" });
+      await tx.insert(organizationMembers).values({
+        organizationId: SEED_ORG_ID,
+        userId: SEED_USER_ID,
+        role: "owner",
+      });
 
-    const [project] = await db
-      .insert(projects)
-      .values({
-        organizationId: org.id,
+      await tx.insert(projects).values({
+        id: SEED_PROJECT_ID,
+        organizationId: SEED_ORG_ID,
         name: "Marketing Site",
         slug: "marketing-site",
-        defaultUrl: "https://example.com",
+        defaultUrl: SEED_PAGE_URL,
         targetWcagLevel: "AA",
-      })
-      .returning();
-    if (!project) throw new Error("Failed to insert project");
+      });
 
-    const [scan] = await db
-      .insert(scans)
-      .values({
-        projectId: project.id,
-        triggeredById: user.id,
-        rootUrl: "https://example.com",
+      await tx.insert(scans).values({
+        id: SEED_SCAN_ID,
+        projectId: SEED_PROJECT_ID,
+        triggeredById: SEED_USER_ID,
+        rootUrl: SEED_PAGE_URL,
         source: "manual",
         status: "completed",
         wcagLevel: "AA",
         startedAt: new Date(),
         finishedAt: new Date(),
-      })
-      .returning();
-    if (!scan) throw new Error("Failed to insert scan");
+      });
 
-    const [page] = await db
-      .insert(scanPages)
-      .values({
-        scanId: scan.id,
-        url: "https://example.com",
+      await tx.insert(scanPages).values({
+        id: SEED_PAGE_ID,
+        scanId: SEED_SCAN_ID,
+        url: SEED_PAGE_URL,
         title: "Example Domain",
         statusCode: 200,
         durationMs: 842,
-      })
-      .returning();
-    if (!page) throw new Error("Failed to insert scan page");
+      });
 
-    await db.insert(findings).values([
-      {
-        scanId: scan.id,
-        scanPageId: page.id,
-        ruleId: "color-contrast",
-        impact: "serious",
-        selector: "main > p:nth-child(2)",
-        html: "<p>Body copy with insufficient contrast</p>",
-        failureSummary: "Element has insufficient color contrast of 2.8:1 (expected 4.5:1)",
-        fingerprint: fingerprint("color-contrast", "main > p:nth-child(2)", page.url),
-      },
-      {
-        scanId: scan.id,
-        scanPageId: page.id,
-        ruleId: "image-alt",
-        impact: "critical",
-        selector: "header img",
-        html: '<img src="/logo.png">',
-        failureSummary: "Element does not have an alt attribute",
-        fingerprint: fingerprint("image-alt", "header img", page.url),
-      },
-    ]);
+      await tx.insert(findings).values([
+        {
+          scanId: SEED_SCAN_ID,
+          scanPageId: SEED_PAGE_ID,
+          ruleId: "color-contrast",
+          impact: "serious",
+          selector: "main > p:nth-child(2)",
+          html: "<p>Body copy with insufficient contrast</p>",
+          failureSummary: "Element has insufficient color contrast of 2.8:1 (expected 4.5:1)",
+          fingerprint: fingerprint("color-contrast", "main > p:nth-child(2)", SEED_PAGE_URL),
+        },
+        {
+          scanId: SEED_SCAN_ID,
+          scanPageId: SEED_PAGE_ID,
+          ruleId: "image-alt",
+          impact: "critical",
+          selector: "header img",
+          html: '<img src="/logo.png">',
+          failureSummary: "Element does not have an alt attribute",
+          fingerprint: fingerprint("image-alt", "header img", SEED_PAGE_URL),
+        },
+      ]);
+    });
 
-    process.stdout.write(`Seeded org=${org.slug} project=${project.slug} scan=${scan.id}\n`);
+    process.stdout.write(`Seeded org=${SEED_ORG_ID} project=${SEED_PROJECT_ID}\n`);
   } finally {
     await client.end();
   }
