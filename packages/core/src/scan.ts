@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { impactSchema, scanSourceSchema, scanStatusSchema, wcagLevelSchema } from "./wcag";
 
-export const findingSchema = z.object({
+export const scanFindingSchema = z.object({
   ruleId: z.string().min(1),
   impact: impactSchema,
   selector: z.string().min(1),
@@ -17,7 +17,7 @@ export const scannedPageSchema = z.object({
   title: z.string().optional(),
   statusCode: z.number().int().optional(),
   durationMs: z.number().int().nonnegative().optional(),
-  findings: z.array(findingSchema).default([]),
+  findings: z.array(scanFindingSchema).default([]),
 });
 
 export const createScanRequestSchema = z.object({
@@ -40,7 +40,7 @@ export const scanResultSchema = z.object({
   errorMessage: z.string().optional(),
 });
 
-export type ScanFinding = z.infer<typeof findingSchema>;
+export type ScanFinding = z.infer<typeof scanFindingSchema>;
 export type ScannedPage = z.infer<typeof scannedPageSchema>;
 export type CreateScanRequest = z.infer<typeof createScanRequestSchema>;
 export type ScanResult = z.infer<typeof scanResultSchema>;

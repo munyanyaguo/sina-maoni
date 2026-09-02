@@ -1,3 +1,17 @@
+import {
+  auditResultSchema,
+  auditStatusSchema,
+  conformanceLevelSchema,
+  findingStatusSchema,
+  impactSchema,
+  issueStatusSchema,
+  orgRoleSchema,
+  planSchema,
+  projectRoleSchema,
+  scanSourceSchema,
+  scanStatusSchema,
+  wcagLevelSchema,
+} from "@sina-maoni/core";
 import { relations, sql } from "drizzle-orm";
 import {
   boolean,
@@ -14,36 +28,21 @@ import {
 } from "drizzle-orm/pg-core";
 
 // ENUMERATIONS
+// Values come from @sina-maoni/core so the wire contract and the database cannot
+// drift. Reordering any of these rewrites the Postgres enum.
 
-export const planEnum = pgEnum("plan", ["free", "pro", "enterprise"]);
-export const orgRoleEnum = pgEnum("org_role", ["owner", "admin", "member", "viewer"]);
-export const projectRoleEnum = pgEnum("project_role", ["owner", "admin", "member", "viewer"]);
-export const wcagLevelEnum = pgEnum("wcag_level", ["A", "AA", "AAA"]);
-export const scanSourceEnum = pgEnum("scan_source", [
-  "manual",
-  "ci",
-  "extension",
-  "scheduled",
-  "mobile_app",
-]);
-export const scanStatusEnum = pgEnum("scan_status", ["queued", "running", "completed", "failed"]);
-export const impactEnum = pgEnum("impact", ["critical", "serious", "moderate", "minor"]);
-export const findingStatusEnum = pgEnum("finding_status", ["open", "ignored", "waived"]);
-export const issueStatusEnum = pgEnum("issue_status", [
-  "open",
-  "in_progress",
-  "fixed",
-  "verified",
-  "wont_fix",
-]);
-export const auditStatusEnum = pgEnum("audit_status", ["pending", "in_progress", "completed"]);
-export const auditResultEnum = pgEnum("audit_result", ["pass", "fail", "na"]);
-export const conformanceLevelEnum = pgEnum("conformance_level", [
-  "supports",
-  "partially_supports",
-  "does_not_support",
-  "not_applicable",
-]);
+export const planEnum = pgEnum("plan", planSchema.options);
+export const orgRoleEnum = pgEnum("org_role", orgRoleSchema.options);
+export const projectRoleEnum = pgEnum("project_role", projectRoleSchema.options);
+export const wcagLevelEnum = pgEnum("wcag_level", wcagLevelSchema.options);
+export const scanSourceEnum = pgEnum("scan_source", scanSourceSchema.options);
+export const scanStatusEnum = pgEnum("scan_status", scanStatusSchema.options);
+export const impactEnum = pgEnum("impact", impactSchema.options);
+export const findingStatusEnum = pgEnum("finding_status", findingStatusSchema.options);
+export const issueStatusEnum = pgEnum("issue_status", issueStatusSchema.options);
+export const auditStatusEnum = pgEnum("audit_status", auditStatusSchema.options);
+export const auditResultEnum = pgEnum("audit_result", auditResultSchema.options);
+export const conformanceLevelEnum = pgEnum("conformance_level", conformanceLevelSchema.options);
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
