@@ -23,14 +23,14 @@ import {
 
 const uuid = z.string().uuid();
 const isoDateTime = z.string().datetime({ offset: true });
+const timestamps = { createdAt: isoDateTime, updatedAt: isoDateTime };
 
 export const organizationSchema = z.object({
   id: uuid,
   name: z.string().min(1),
   slug: z.string().min(1),
   plan: planSchema,
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const userSchema = z.object({
@@ -38,16 +38,14 @@ export const userSchema = z.object({
   email: z.string().email(),
   name: z.string().nullable(),
   emailVerifiedAt: isoDateTime.nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const organizationMemberSchema = z.object({
   organizationId: uuid,
   userId: uuid,
   role: orgRoleSchema,
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const projectSchema = z.object({
@@ -58,16 +56,14 @@ export const projectSchema = z.object({
   defaultUrl: z.string().url().nullable(),
   targetWcagLevel: wcagLevelSchema,
   archivedAt: isoDateTime.nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const projectMemberSchema = z.object({
   projectId: uuid,
   userId: uuid,
   role: projectRoleSchema,
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const apiKeySchema = z.object({
@@ -77,8 +73,7 @@ export const apiKeySchema = z.object({
   prefix: z.string().min(1),
   lastUsedAt: isoDateTime.nullable(),
   revokedAt: isoDateTime.nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const ruleSchema = z.object({
@@ -91,8 +86,7 @@ export const ruleSchema = z.object({
   wcagLevel: wcagLevelSchema.nullable(),
   wcagCriteria: z.array(z.string()),
   tags: z.array(z.string()),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const scanSchema = z.object({
@@ -109,8 +103,7 @@ export const scanSchema = z.object({
   startedAt: isoDateTime.nullable(),
   finishedAt: isoDateTime.nullable(),
   errorMessage: z.string().nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const scanPageSchema = z.object({
@@ -120,8 +113,7 @@ export const scanPageSchema = z.object({
   title: z.string().nullable(),
   statusCode: z.number().int().nullable(),
   durationMs: z.number().int().nonnegative().nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const findingSchema = z.object({
@@ -136,8 +128,7 @@ export const findingSchema = z.object({
   failureSummary: z.string().nullable(),
   fingerprint: z.string().min(1),
   metadata: z.record(z.unknown()).nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const issueSchema = z.object({
@@ -152,8 +143,7 @@ export const issueSchema = z.object({
   externalUrl: z.string().url().nullable(),
   dueAt: isoDateTime.nullable(),
   resolvedAt: isoDateTime.nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const issueFindingSchema = z.object({
@@ -170,8 +160,7 @@ export const auditSchema = z.object({
   wcagLevel: wcagLevelSchema,
   startedAt: isoDateTime.nullable(),
   completedAt: isoDateTime.nullable(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export const auditItemSchema = z.object({
@@ -183,8 +172,7 @@ export const auditItemSchema = z.object({
   conformance: conformanceLevelSchema.nullable(),
   notes: z.string().nullable(),
   isManual: z.boolean(),
-  createdAt: isoDateTime,
-  updatedAt: isoDateTime,
+  ...timestamps,
 });
 
 export type Organization = z.infer<typeof organizationSchema>;

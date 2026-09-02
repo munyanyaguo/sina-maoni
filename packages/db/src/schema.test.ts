@@ -3,6 +3,7 @@ import {
   auditItemSchema,
   auditSchema,
   findingSchema,
+  issueFindingSchema,
   issueSchema,
   organizationMemberSchema,
   organizationSchema,
@@ -21,6 +22,7 @@ import {
   auditItems,
   audits,
   findings,
+  issueFindings,
   issues,
   organizationMembers,
   organizations,
@@ -32,26 +34,30 @@ import {
   users,
 } from "./schema";
 
+// The fourth element lists columns the contract deliberately withholds. A column
+// missing from both the contract and that list fails the test, so a new column
+// cannot be forgotten and a secret cannot be added to the contract unnoticed.
 const CONTRACTS = [
-  ["organizations", organizationSchema, organizations],
-  ["users", userSchema, users],
-  ["organization_members", organizationMemberSchema, organizationMembers],
-  ["projects", projectSchema, projects],
-  ["project_members", projectMemberSchema, projectMembers],
-  ["api_keys", apiKeySchema, apiKeys],
-  ["rules", ruleSchema, rules],
-  ["scans", scanSchema, scans],
-  ["scan_pages", scanPageSchema, scanPages],
-  ["findings", findingSchema, findings],
-  ["issues", issueSchema, issues],
-  ["audits", auditSchema, audits],
-  ["audit_items", auditItemSchema, auditItems],
+  ["organizations", organizationSchema, organizations, []],
+  ["users", userSchema, users, ["passwordHash"]],
+  ["organization_members", organizationMemberSchema, organizationMembers, []],
+  ["projects", projectSchema, projects, []],
+  ["project_members", projectMemberSchema, projectMembers, []],
+  ["api_keys", apiKeySchema, apiKeys, ["hashedKey"]],
+  ["rules", ruleSchema, rules, []],
+  ["scans", scanSchema, scans, []],
+  ["scan_pages", scanPageSchema, scanPages, []],
+  ["findings", findingSchema, findings, []],
+  ["issues", issueSchema, issues, []],
+  ["issue_findings", issueFindingSchema, issueFindings, []],
+  ["audits", auditSchema, audits, []],
+  ["audit_items", auditItemSchema, auditItems, []],
 ] as const;
 
-describe.each(CONTRACTS)("%s contract", (_table, schema, table) => {
-  it("only exposes fields that exist as columns", () => {
-    expect(Object.keys(getTableColumns(table))).toEqual(
-      expect.arrayContaining(Object.keys(schema.shape)),
+describe.each(CONTRACTS)("%s contract", (_table, schema, table, withheld) => {
+  it("accounts for every column exactly once", () => {
+    expect([...Object.keys(schema.shape), ...withheld].sort()).toEqual(
+      Object.keys(getTableColumns(table)).sort(),
     );
   });
 });
