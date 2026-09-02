@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "echo 'Expo dev server lands in Phase 6 (Days 261-270)'",
     "lint": "eslint .",
     "test": "vitest run --passWithNoTests",
     "type-check": "tsc -p tsconfig.json --noEmit"
