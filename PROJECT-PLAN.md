@@ -196,7 +196,21 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 - [x] `.env.example` at root documenting every variable
 - [ ] `packages/core/env.ts` — Zod-validated env schema, fails fast at startup
 - [ ] Per-app `.env` loading wired through `packages/core`
-- [ ] GitHub Actions secrets: `DATABASE_URL`, `JWT_SECRET`, `FLY_API_TOKEN`, `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`, `SENTRY_DSN`, `TURBO_TOKEN`, `TURBO_TEAM`
+- [x] Secret inventory agreed (below). Each remaining secret is created in the same PR that
+      makes a workflow read it — a credential nothing consumes is attack surface, rotation
+      burden and expiry noise for no benefit.
+
+| Secret                                                 | Home                                                                | Create when                                           |
+| ------------------------------------------------------ | ------------------------------------------------------------------- | ----------------------------------------------------- |
+| `TURBO_TOKEN` / `TURBO_TEAM`                           | GitHub Actions                                                      | done                                                  |
+| `FLY_API_TOKEN`                                        | GitHub Actions                                                      | Phase 1, when `deploy-api.yml` leaves manual dispatch |
+| `VERCEL_TOKEN` / `VERCEL_ORG_ID` / `VERCEL_PROJECT_ID` | GitHub Actions                                                      | Phase 3, when `deploy-web.yml` leaves manual dispatch |
+| `SENTRY_AUTH_TOKEN`                                    | GitHub Actions                                                      | when source-map upload is wired                       |
+| `SENTRY_DSN`                                           | repository **variable**, not a secret — DSNs ship in client bundles | Phase 1                                               |
+| `DATABASE_URL` (prod)                                  | Fly.io runtime secret                                               | Phase 1                                               |
+| `JWT_SECRET` (prod)                                    | Fly.io runtime secret                                               | Phase 1                                               |
+| `DATABASE_URL` (CI)                                    | inline in `ci.yml` — throwaway service-container credentials        | done                                                  |
+
 - [ ] Secret rotation procedure written down
 
 ### Days 18–20: Architecture documentation
