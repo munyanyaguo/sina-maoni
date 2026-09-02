@@ -153,7 +153,7 @@ audit_items           (id, audit_id, criterion, level, result, conformance, note
 
 ### Days 4–6: GitHub Actions CI pipeline
 
-- [x] `ci.yml` triggers on push to all branches and on PRs
+- [x] `ci.yml` triggers on PRs to all branches and on push to `main`
 - [x] Node 22 + pnpm via `packageManager` field
 - [x] Postgres 16 service container
 - [x] Steps: install → format → lint → type-check → test → build

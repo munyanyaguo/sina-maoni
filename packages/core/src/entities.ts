@@ -25,6 +25,26 @@ const uuid = z.string().uuid();
 const isoDateTime = z.string().datetime({ offset: true });
 const timestamps = { createdAt: isoDateTime, updatedAt: isoDateTime };
 
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+/** Mirrors what a Postgres jsonb column can hold, which is any JSON value and not just an object. */
+export const jsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.null(),
+    z.array(jsonValueSchema),
+    z.record(z.string(), jsonValueSchema),
+  ]),
+);
+
 export const organizationSchema = z.object({
   id: uuid,
   name: z.string().min(1),
@@ -127,7 +147,7 @@ export const findingSchema = z.object({
   html: z.string().nullable(),
   failureSummary: z.string().nullable(),
   fingerprint: z.string().min(1),
-  metadata: z.record(z.unknown()).nullable(),
+  metadata: jsonValueSchema,
   ...timestamps,
 });
 

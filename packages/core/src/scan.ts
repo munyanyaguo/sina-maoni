@@ -2,6 +2,9 @@ import { z } from "zod";
 
 import { impactSchema, scanSourceSchema, scanStatusSchema, wcagLevelSchema } from "./wcag";
 
+// Wire contracts for the scanning engine. These are the shapes a scanner
+// produces, before anything is persisted; the stored rows live in entities.ts.
+
 export const scanFindingSchema = z.object({
   ruleId: z.string().min(1),
   impact: impactSchema,
@@ -12,7 +15,7 @@ export const scanFindingSchema = z.object({
   helpUrl: z.string().url().optional(),
 });
 
-export const scannedPageSchema = z.object({
+export const scanResultPageSchema = z.object({
   url: z.string().url(),
   title: z.string().optional(),
   statusCode: z.number().int().optional(),
@@ -34,13 +37,13 @@ export const createScanRequestSchema = z.object({
 export const scanResultSchema = z.object({
   scanId: z.string().uuid(),
   status: scanStatusSchema,
-  pages: z.array(scannedPageSchema).default([]),
+  pages: z.array(scanResultPageSchema).default([]),
   startedAt: z.coerce.date().optional(),
   finishedAt: z.coerce.date().optional(),
   errorMessage: z.string().optional(),
 });
 
 export type ScanFinding = z.infer<typeof scanFindingSchema>;
-export type ScannedPage = z.infer<typeof scannedPageSchema>;
+export type ScanResultPage = z.infer<typeof scanResultPageSchema>;
 export type CreateScanRequest = z.infer<typeof createScanRequestSchema>;
 export type ScanResult = z.infer<typeof scanResultSchema>;
