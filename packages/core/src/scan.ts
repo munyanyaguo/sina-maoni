@@ -12,11 +12,11 @@ export const scanFindingSchema = z.object({
   html: z.string().optional(),
   failureSummary: z.string().optional(),
   wcagCriteria: z.array(z.string()).default([]),
-  helpUrl: z.string().url().optional(),
+  helpUrl: z.url().optional(),
 });
 
 export const scanResultPageSchema = z.object({
-  url: z.string().url(),
+  url: z.url(),
   title: z.string().optional(),
   statusCode: z.number().int().optional(),
   durationMs: z.number().int().nonnegative().optional(),
@@ -24,18 +24,18 @@ export const scanResultPageSchema = z.object({
 });
 
 export const createScanRequestSchema = z.object({
-  projectId: z.string().uuid(),
-  rootUrl: z.string().url(),
+  projectId: z.uuid(),
+  rootUrl: z.url(),
   source: scanSourceSchema.default("manual"),
   wcagLevel: wcagLevelSchema.default("AA"),
   maxPages: z.number().int().min(1).max(500).default(1),
   commitSha: z.string().optional(),
   branch: z.string().optional(),
-  pullRequestUrl: z.string().url().optional(),
+  pullRequestUrl: z.url().optional(),
 });
 
 export const scanResultSchema = z.object({
-  scanId: z.string().uuid(),
+  scanId: z.uuid(),
   status: scanStatusSchema,
   pages: z.array(scanResultPageSchema).default([]),
   startedAt: z.coerce.date().optional(),

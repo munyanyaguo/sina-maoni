@@ -21,8 +21,8 @@ import {
 // strings, and secret columns (users.password_hash, api_keys.hashed_key) are
 // deliberately absent so they cannot be serialised into a response.
 
-const uuid = z.string().uuid();
-const isoDateTime = z.string().datetime({ offset: true });
+const uuid = z.uuid();
+const isoDateTime = z.iso.datetime({ offset: true });
 const timestamps = { createdAt: isoDateTime, updatedAt: isoDateTime };
 
 export type JsonValue =
@@ -55,7 +55,7 @@ export const organizationSchema = z.object({
 
 export const userSchema = z.object({
   id: uuid,
-  email: z.string().email(),
+  email: z.email(),
   name: z.string().nullable(),
   emailVerifiedAt: isoDateTime.nullable(),
   ...timestamps,
@@ -73,7 +73,7 @@ export const projectSchema = z.object({
   organizationId: uuid,
   name: z.string().min(1),
   slug: z.string().min(1),
-  defaultUrl: z.string().url().nullable(),
+  defaultUrl: z.url().nullable(),
   targetWcagLevel: wcagLevelSchema,
   archivedAt: isoDateTime.nullable(),
   ...timestamps,
@@ -101,7 +101,7 @@ export const ruleSchema = z.object({
   engine: z.string().min(1),
   description: z.string(),
   help: z.string(),
-  helpUrl: z.string().url().nullable(),
+  helpUrl: z.url().nullable(),
   defaultImpact: impactSchema,
   wcagLevel: wcagLevelSchema.nullable(),
   wcagCriteria: z.array(z.string()),
@@ -113,13 +113,13 @@ export const scanSchema = z.object({
   id: uuid,
   projectId: uuid,
   triggeredById: uuid.nullable(),
-  rootUrl: z.string().url(),
+  rootUrl: z.url(),
   source: scanSourceSchema,
   status: scanStatusSchema,
   wcagLevel: wcagLevelSchema,
   commitSha: z.string().nullable(),
   branch: z.string().nullable(),
-  pullRequestUrl: z.string().url().nullable(),
+  pullRequestUrl: z.url().nullable(),
   startedAt: isoDateTime.nullable(),
   finishedAt: isoDateTime.nullable(),
   errorMessage: z.string().nullable(),
@@ -129,7 +129,7 @@ export const scanSchema = z.object({
 export const scanPageSchema = z.object({
   id: uuid,
   scanId: uuid,
-  url: z.string().url(),
+  url: z.url(),
   title: z.string().nullable(),
   statusCode: z.number().int().nullable(),
   durationMs: z.number().int().nonnegative().nullable(),
@@ -160,7 +160,7 @@ export const issueSchema = z.object({
   status: issueStatusSchema,
   impact: impactSchema,
   assigneeId: uuid.nullable(),
-  externalUrl: z.string().url().nullable(),
+  externalUrl: z.url().nullable(),
   dueAt: isoDateTime.nullable(),
   resolvedAt: isoDateTime.nullable(),
   ...timestamps,
